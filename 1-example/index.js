@@ -32,19 +32,43 @@ Note.init(
     modelName: "note",
   }
 )
+Note.sync()
 
 app.get("/api/notes", async (req, res) => {
   const notes = await Note.findAll()
+  // console.log('notes:', JSON.stringify(notes));
   res.json(notes)
 })
 
+app.get("/api/notes/:id", async (req, res) => {
+  const id = req.params.id
+  const result = await Note.findByPk(id)
+  if (result) {
+    res.json(result)
+  } else {
+    res.status(400).end()
+  }
+})
+
+app.put("/api/notes/:id", async (req, res) => {
+  const id = req.params.id
+  const important = req.body.important
+  const updatedNote = await Note.findByPk(id)
+  if(updatedNote) {
+    updatedNote.important = important
+    await updatedNote.save()
+    res.json(updatedNote)
+  } else {
+    res.status(400).end()
+  }
+})
+
 app.post("/api/notes", async (req, res) => {
-  console.log("req.body:", req.body)
   try {
     const newNote = await Note.create(req.body)
     return res.json(newNote)
   } catch (error) {
-    return res.status(400).json({error})
+    return res.status(400).json({ error })
   }
 })
 
