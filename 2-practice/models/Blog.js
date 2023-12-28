@@ -1,9 +1,6 @@
-require("dotenv").config()
-const { Sequelize, Model, DataTypes } = require("sequelize")
+const { Model, DataTypes } = require("sequelize")
 
-const sequelize = new Sequelize(process.env.DATABASE_CONNECTION, {
-  dialect: "postgres",
-})
+const { sequelize } = require("../utils/db")
 
 class Blog extends Model {}
 

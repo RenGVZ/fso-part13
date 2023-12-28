@@ -1,42 +1,24 @@
-require("dotenv").config()
 const express = require("express")
 const app = express()
+const { PORT } = require("./utils/config")
+const { connectToDatabase } = require("./utils/db")
+
+const { errorHandler, unknownEndpoint } = require("./utils/middleware")
+
+const BlogsRouter = require("./controllers/blogs")
+
 app.use(express.json())
-const Blog = require("./models/Blog")
 
-app.get("/api/blogs", async (req, res) => {
-  const blogs = await Blog.findAll()
-  res.json(blogs)
-})
+app.use("/api/blogs", BlogsRouter)
 
-app.post("/api/blogs", async (req, res) => {
-  console.log("req.body", req.body)
-  try {
-    const newBlog = await Blog.create(req.body)
-    return res.status(201).json(newBlog)
-  } catch (error) {
-    console.log("error:", error)
-    return res.status(400).json({ error })
-  }
-})
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
-app.delete("/api/blogs/:id", async (req, res) => {
-  const id = req.params.id
-  try {
-    await Blog.destroy({
-      where: {
-        id,
-      },
-    })
-    return res.status(204).end()
-  } catch (error) {
-    console.log("error:", error)
-    return res.status(400).json({ error }).end()
-  }
-})
+const start = async () => {
+  await connectToDatabase()
+  app.listen(PORT, () => {
+    console.log(`Server listening on port: ${PORT}`)
+  })
+}
 
-const PORT = 3001
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT}`)
-})
+start()
