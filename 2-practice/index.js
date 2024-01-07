@@ -8,12 +8,14 @@ const { errorHandler, unknownEndpoint } = require("./utils/middleware")
 const BlogsRouter = require("./controllers/blogs")
 const UserRouter = require("./controllers/users")
 const LoginRouter = require("./controllers/login")
+const AuthorRouter = require("./controllers/authors")
 
 app.use(express.json())
 
 app.use("/api/blogs", BlogsRouter)
 app.use("/api/users", UserRouter)
 app.use("/api/login", LoginRouter)
+app.use("/api/authors", AuthorRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
