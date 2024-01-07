@@ -16,7 +16,15 @@ router.post("/", async (req, res) => {
   const correctPassword = body.password === "secret"
 
   if (!(user && correctPassword)) {
-    return res.status(401).json({ error: "username or password is incorrect" })
+    return res
+      .status(401)
+      .json({ error: "username or password is incorrect" })
+  }
+
+  if (user.disabled) {
+    return res
+      .status(401)
+      .json({ error: "account disabled, please contact admin" })
   }
 
   const userForToken = {
