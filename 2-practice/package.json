@@ -1,7 +1,7 @@
 {
   "name": "2-practice",
   "version": "1.0.0",
-  "description": "Postgres cluster throbbing-sky-3884 created   Username:    postgres   Password:    9ZIKp6R9iTgMm1y   Hostname:    throbbing-sky-3884.internal   Flycast:     fdaa:2:58ca:0:1::4   Proxy port:  5432   Postgres port:  5433   Connection string: postgres://postgres:9ZIKp6R9iTgMm1y@throbbing-sky-3884.flycast:5432",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js"
