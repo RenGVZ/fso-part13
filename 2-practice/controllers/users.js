@@ -21,6 +21,17 @@ router.post("/", async (req, res) => {
 })
 
 router.get("/:id", async (req, res) => {
+  const where = {}
+
+  // if req.query.read, display only readingLists that have read = true
+  if (req.query.read) {
+    if (req.query.read === "true" || req.query.read === "false") {
+      where.read = req.query.read === "true"
+    } else {
+      return res.status(400).json({ error: "invalid query" }).end()
+    }
+  }
+
   const user = await User.findByPk(req.params.id, {
     attributes: { exclude: [""] },
     include: {
@@ -31,7 +42,8 @@ router.get("/:id", async (req, res) => {
       },
       through: {
         model: ReadingLists,
-        attributes: ["read", "blogId"],
+        attributes: ["read", "id"],
+        where
       },
     },
   })
